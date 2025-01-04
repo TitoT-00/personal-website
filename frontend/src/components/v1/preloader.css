@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;700&family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&family=Literata");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
+.preloader {
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 55;
+    overflow: hidden;
+    visibility: visible;
+    transition: visibility 0s linear 0.5s;
+}
+
+.split-half {
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+    background: black;
+    overflow: hidden;
+}
+
+.split-half span {
+    font-size: 5rem;
+    text-transform: uppercase;
+    animation: textPop 0.5s ease-out forwards;
+    transition: all 0.2s ease-in-out;
+}
+
+.split-half.left {
+    left: 0;
+}
+
+.split-half.right {
+    right: 0;
+}
+
+/* Split Animation States */
+.split-active {
+    visibility: hidden;
+}
+
+.split-active .split-half.left {
+    transform: translateX(-100%);
+}
+
+.split-active .split-half.right {
+    transform: translateX(100%);
+}
+
+@keyframes textPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    70% {
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
