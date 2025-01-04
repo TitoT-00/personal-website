@@ -22,8 +22,7 @@ const Projects = () => {
                                 <h3>Hexcode Revealer</h3>
                                 <p>The fast way to get a hexcode from any image/camera</p>
                                 <div className="project-links">
-                                  <a href="#" target="_blank" rel="noopener noreferrer">Demo</a>
-                                  <a href="#" target="_blank" rel="noopener noreferrer">Code</a>
+                                  <a href="https://github.com/TitoT-00/RevealHexcode" target="_blank" rel="noopener noreferrer">Source Code</a>
                                 </div>
                               </motion.div>
                               <motion.div
@@ -34,8 +33,8 @@ const Projects = () => {
                                 <h3>OCRapp</h3>
                                 <p>A way to take an image containing text and extracting it into a file. </p>
                                 <div className="project-links">
-                                  <a href="#" target="_blank" rel="noopener noreferrer">Demo</a>
-                                  <a href="#" target="_blank" rel="noopener noreferrer">Code</a>
+                                  <a href="https://github.com/TitoT-00/ocrApp" target="_blank" rel="noopener noreferrer" >Source Code</a>
+                                
                                 </div>
                               </motion.div>
                             </div>
