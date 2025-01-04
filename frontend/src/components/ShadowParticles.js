@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 const ShadowEffect = () => {
-  const [theme, setTheme] = useState('gold');
   const canvasRef = useRef(null);
   const particles = useRef([]);
   const mousePosition = useRef({ x: 0, y: 0 });
@@ -128,7 +127,7 @@ const ShadowEffect = () => {
           }
         };
 
-        const currentColors = colors[theme];
+        const currentColors = colors['gold']; // default to gold theme
         
         // Create flowing shape
         const time = Date.now() * 0.001;
@@ -190,7 +189,7 @@ const ShadowEffect = () => {
         }
       };
 
-      const currentColors = colors[theme];
+      const currentColors = colors['gold']; // default to gold theme
 
       // Main particle glow
       const glowSize = this.size * 3;
@@ -260,7 +259,7 @@ const ShadowEffect = () => {
         }
       };
 
-      const currentColors = colors[theme];
+      const currentColors = colors['gold']; // default to gold theme
 
       ctx.fillStyle = currentColors.background;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -292,7 +291,7 @@ const ShadowEffect = () => {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <>
@@ -304,7 +303,7 @@ const ShadowEffect = () => {
           left: 0,
           width: '100%',
           height: '100%',
-          background: theme === 'gold' ? '#000000' : '#ffffff',
+          background: '#000000',
           zIndex: 0,
           transition: 'background-color 0.5s ease'
         }}
