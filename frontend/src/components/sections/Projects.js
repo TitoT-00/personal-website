@@ -32,8 +32,14 @@ const Projects = () => {
                               description="3 Flutter Projects: Camp App, Firestarter, myApp"
                               code="Flutter/Dart, Hive DB, Firebase (Auth/Cloud)"
                               link="https://github.com/TitoT-00/flutterproj/"
-  
-                              /> 
+                              />
+                              <ProjectCard
+                               header="Retro Game Haven"
+                               description="E-Commerce Website for Retro Games and Consoles and More"
+                               code="Python Flask and Stripe Integration"
+                               link="https://github.com/TitoT-00/ecommerce-site"
+                               />
+
                             </div>
                           </motion.section>
     );
