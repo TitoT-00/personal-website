@@ -40,6 +40,13 @@ const Projects = () => {
                                link="https://github.com/TitoT-00/ecommerce-site"
                                />
 
+                               <ProjectCard
+                               header="Design Foods POS"
+                               description="Point of Sale for a local restaurant, with customizable options for the menu"
+                               code="React/Vite"
+                               link="https://github.com/TitoT-00/design-food-menu"
+                               />
+
                             </div>
                           </motion.section>
     );
