@@ -41,10 +41,10 @@ const Home = ({activeSection, setActiveSection}) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.8 }}
         >
-          <a className="primary" onClick={() => setActiveSection('projects')}>
+          <button className="primary" onClick={() => setActiveSection('projects')}>
             <i className="fas fa-code"></i>
             View Projects
-          </a>
+          </button>
           <a href="mailto:thomastito88@gmail.com" className="secondary">
             <i className="fas fa-paper-plane"></i>
             Get in Touch

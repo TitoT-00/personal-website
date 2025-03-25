@@ -560,7 +560,7 @@ article {
   margin-top: 2rem;
 }
 
-.title-cta a {
+.title-cta a, button{
   padding: 1rem 2rem;
   border-radius: 50px;
   font-size: 1.1rem;
@@ -572,37 +572,37 @@ article {
   gap: 0.5rem;
 }
 
-.gold .title-cta a.primary {
+.gold .title-cta a.primary, button.primary {
   background: #ffffff;
   color: #000000;
 }
 
-.dark .title-cta a.primary {
+.dark .title-cta a.primary, button.primary {
   background: #000000;
   color: #ffffff;
 }
 
-.gold .title-cta a.secondary {
+.gold .title-cta a.secondary, button.secondary {
   background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.dark .title-cta a.secondary {
+.dark .title-cta a.secondary, button.secondary {
   background: rgba(0, 0, 0, 0.1);
   color: #000000;
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.title-cta a:hover {
+.title-cta a:hover, button:hover {
   transform: translateY(-3px);
 }
 
-.gold .title-cta a.primary:hover {
+.gold .title-cta a.primary:hover, button.primary:hover {
   box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
 }
 
-.dark .title-cta a.primary:hover {
+.dark .title-cta a.primary:hover, button.primary:hover {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -625,7 +625,7 @@ article {
     padding: 0 2rem;
   }
   
-  .title-cta a {
+  .title-cta a, button {
     width: 90%;
     justify-content: center;
   }
