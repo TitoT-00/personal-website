@@ -20,10 +20,6 @@ function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
-  const handleNavClick = (e, section) => {
-    e.preventDefault();
-    setActiveSection(section);
-  };
 
   return (
     <div className={`App ${theme}`}>
@@ -42,7 +38,7 @@ function App() {
             <main className="main-content">
               <AnimatePresence mode="wait">
                 {activeSection === 'home' && (
-                  <Home key="home" activeSection={activeSection} handleNavClick={handleNavClick}/>
+                  <Home key="home" activeSection={activeSection} setActiveSection={setActiveSection}/>
                 )}
                 {activeSection === 'about' && (
                  <About key="about" />

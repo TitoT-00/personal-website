@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const Home = (activeSection, handleNavClick) => {
+const Home = ({activeSection, setActiveSection}) => {
     return (
         <motion.section
         id="home"
@@ -41,11 +41,11 @@ const Home = (activeSection, handleNavClick) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.8 }}
         >
-          <a href="#projects" className="primary" onClick={(e) => handleNavClick(e, 'projects')}>
+          <a className="primary" onClick={() => setActiveSection('projects')}>
             <i className="fas fa-code"></i>
             View Projects
           </a>
-          <a href="#contact" className="secondary" onClick={(e) => handleNavClick(e, 'contact')}>
+          <a href="mailto:thomastito88@gmail.com" className="secondary">
             <i className="fas fa-paper-plane"></i>
             Get in Touch
           </a>
