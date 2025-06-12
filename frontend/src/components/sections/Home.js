@@ -1,7 +1,9 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
+import "./Home.css";
 
-const Home = ({activeSection, setActiveSection}) => {
+const Home = ({activeSection}) => {
     return (
         <motion.section
         id="home"
@@ -10,6 +12,14 @@ const Home = ({activeSection, setActiveSection}) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
+        <motion.div
+          className="profile-picture-container"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <img src="/personal-website/profile.png" alt="Tito T" className="profile-picture" />
+        </motion.div>
         <motion.h1 
           className="title-main"
           initial={{ opacity: 0, y: 30 }}
@@ -41,13 +51,13 @@ const Home = ({activeSection, setActiveSection}) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.8 }}
         >
-          <button className="primary" onClick={() => setActiveSection('projects')}>
+          <Link to="/projects" className="primary">
             <i className="fas fa-code"></i>
             View Projects
-          </button>
-          <a href="mailto:thomastito88@gmail.com" className="secondary">
-            <i className="fas fa-paper-plane"></i>
-            Get in Touch
+          </Link>
+          <a href="/personal-website/resources/resume.pdf" className="secondary" download="tito_resume.pdf">
+            <i className="fas fa-download"></i>
+            Download Resume
           </a>
         </motion.div>
       </motion.section>

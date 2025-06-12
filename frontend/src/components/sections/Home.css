@@ -1,0 +1,45 @@
+.title-cta a,
+.title-cta Link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.title-cta a i {
+  font-size: 1.1rem;
+}
+.profile-picture-container {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-picture:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.dark .profile-picture {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.title-main {
+  margin-top: 2rem;
+}

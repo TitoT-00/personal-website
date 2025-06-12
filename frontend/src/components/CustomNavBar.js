@@ -1,41 +1,47 @@
 import React from "react";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import "./CustomNavBar.css";
 
-const CustomNavBar = ({activeSection,setActiveSection}) => {
+const CustomNavBar = ({ activeSection }) => {
     return(
         <nav className="navigation">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveSection('home')}
-            className={activeSection === 'home' ? 'active' : ''}
-          >
-            Home
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveSection('about')}
-            className={activeSection === 'about' ? 'active' : ''}
-          >
-            About
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveSection('projects')}
-            className={activeSection === 'projects' ? 'active' : ''}
-          >
-            Projects
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveSection('contact')}
-            className={activeSection === 'contact' ? 'active' : ''}
-          >
-            Contact
-          </motion.button>
+          <Link to="/personal-website">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className={activeSection === 'home' ? 'active' : ''}
+            >
+              Home
+            </motion.button>
+          </Link>
+          <Link to="/personal-website/about">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className={activeSection === 'about' ? 'active' : ''}
+            >
+              About
+            </motion.button>
+          </Link>
+          <Link to="/personal-website/projects">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className={activeSection === 'projects' ? 'active' : ''}
+            >
+              Projects
+            </motion.button>
+          </Link>
+          <Link to="/personal-website/contact">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className={activeSection === 'contact' ? 'active' : ''}
+            >
+              Contact
+            </motion.button>
+          </Link>
         </nav>
 
     );
