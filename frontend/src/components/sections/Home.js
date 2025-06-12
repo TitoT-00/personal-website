@@ -55,7 +55,7 @@ const Home = ({activeSection}) => {
             <i className="fas fa-code"></i>
             View Projects
           </Link>
-          <a href="/personal-website/resources/resume.pdf" className="secondary" download="tito_resume.pdf">
+          <a href="/personal-website/resume.pdf" className="secondary" download>
             <i className="fas fa-download"></i>
             Download Resume
           </a>
