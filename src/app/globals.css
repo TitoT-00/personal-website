@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+:root {
+  --background: #02030a;
+  --foreground: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+button {
+  font:inhert;
+}
+
+
+.stars {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  animation: drift-stars linear infinite;
+}
+
+.stars-small {
+  opacity: 0.45;
+  background-image:
+    radial-gradient(circle, white 1px, transparent 1px),
+    radial-gradient(circle, white 1px, transparent 1px);
+
+  background-position:
+    0 0,
+    40px 60px;
+
+  background-size:
+    90px 90px,
+    130px 130px;
+
+  animation-duration: 90s;
+}
+
+.stars-medium {
+  opacity: 0.65;
+  background-image:
+    radial-gradient(circle, white 1.5px, transparent 1.5px),
+    radial-gradient(circle, #93c5fd 1px, transparent 1px);
+
+  background-position:
+    20px 30px,
+    70px 110px;
+
+  background-size:
+    180px 180px,
+    240px 240px;
+
+  animation-duration: 140s;
+}
+
+.stars-large {
+  opacity: 0.8;
+  background-image:
+    radial-gradient(circle, white 2px, transparent 2px),
+    radial-gradient(circle, #c4b5fd 1.5px, transparent 1.5px);
+
+  background-position:
+    80px 20px,
+    140px 150px;
+
+  background-size:
+    320px 320px,
+    420px 420px;
+
+  animation-duration: 190s;
+}
+
+@keyframes drift-stars {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-300px);
+  }
+}
+
+@keyframes node-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.constellation-node {
+  animation: node-float 4s ease-in-out infinite;
+}
