@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { motion, AnimatePresence, useMotionValue, useDragControls, animate as animateValue } from "framer-motion";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useMotionValue, animate as animateValue } from "framer-motion";
 
 import Background from "@/src/components/Background";
 import BackgroundConstellations from "@/src/components/BackgroundConstellations";
@@ -114,11 +114,42 @@ export default function Home() {
   }, []);
 
   // Pixel-based motion values driving the world transform. Programmatic
-  // camera changes animate these; dragging manipulates them directly.
+  // camera changes animate these; manual panning manipulates them directly.
   const worldX = useMotionValue(0);
   const worldY = useMotionValue(0);
   const worldScale = useMotionValue(1);
-  const dragControls = useDragControls();
+
+  // Manual pan implementation (no Framer Motion `drag` gesture) - Framer
+  // Motion's drag system attaches its own native pointerdown listener that
+  // can capture the pointer before React's bubble-phase handlers (and their
+  // stopPropagation calls) ever run, silently eating clicks on nested node
+  // buttons. Plain pointer events give full, predictable control instead.
+  const panState = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null);
+
+  const handleWorldPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    panState.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      originX: worldX.get(),
+      originY: worldY.get(),
+    };
+    window.addEventListener("pointermove", handleWindowPointerMove);
+    window.addEventListener("pointerup", handleWindowPointerUp);
+  };
+
+  const handleWindowPointerMove = (e: PointerEvent) => {
+    const pan = panState.current;
+    if (!pan) return;
+    worldX.set(pan.originX + (e.clientX - pan.startX));
+    worldY.set(pan.originY + (e.clientY - pan.startY));
+  };
+
+  const handleWindowPointerUp = () => {
+    panState.current = null;
+    window.removeEventListener("pointermove", handleWindowPointerMove);
+    window.removeEventListener("pointerup", handleWindowPointerUp);
+  };
 
   useEffect(() => {
     if (!viewportSize.width || !viewportSize.height) return;
@@ -172,23 +203,14 @@ export default function Home() {
       <BackgroundConstellations />
 
       {/* Camera/World Container - click and drag the background to pan.
-          Drag is started manually (dragListener=false + onPointerDown) and
-          only fires when the pointer-down target is the world div itself,
-          never a descendant button/card, so node clicks are never eaten
-          by the drag gesture recognizer. */}
+          Panning is fully manual (plain pointer events, no Framer Motion
+          `drag`) and only starts when the pointer-down target is the world
+          div itself, never a descendant button/card, so node clicks are
+          never eaten by a drag gesture recognizer. */}
       <motion.div
         className="constellation-world absolute inset-0 cursor-grab active:cursor-grabbing"
         style={{ transformOrigin: "0% 0%", x: worldX, y: worldY, scale: worldScale }}
-        drag
-        dragListener={false}
-        dragControls={dragControls}
-        dragMomentum={false}
-        dragElastic={0}
-        onPointerDown={(e) => {
-          if (e.target === e.currentTarget) {
-            dragControls.start(e);
-          }
-        }}
+        onPointerDown={handleWorldPointerDown}
       >
         {/* SVG Layer - All branches */}
         <svg
@@ -246,52 +268,71 @@ export default function Home() {
           const isSelected = selectedCategory === node.title;
 
           return (
-            <motion.button
+            // Plain positioning wrapper - never animated, so its centering
+            // transform can never be clobbered by Framer Motion (which owns
+            // `transform` on any element where it animates x/y/scale/rotate)
+            // or by a CSS keyframe animation targeting `transform`.
+            <div
               key={node.id}
-              type="button"
-              onClick={() => handleNodeClick(node.title)}
-              className="constellation-node group absolute z-10"
+              className="absolute"
               style={{
                 left: `${node.x}%`,
                 top: `${node.y}%`,
                 transform: "translate(-50%, -50%)",
+                // The selected hub node must always sit above its own expanded
+                // tree (z-20) so nothing rendered by its children can ever
+                // cover it and block re-collapsing it. Unselected nodes stay
+                // below the tree layer as before.
+                zIndex: isSelected ? 30 : 10,
               }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{
-                opacity: selectedCategory && !isSelected ? 0.3 : 1,
-                scale: 1,
-              }}
-              transition={{ delay: node.delay, duration: 0.6 }}
             >
-              {/* Glow */}
-              <div
-                className="absolute -inset-4 rounded-full opacity-30 blur-xl transition-opacity duration-300 group-hover:opacity-60"
-                style={{ backgroundColor: node.color }}
-              />
-
-              {/* Node */}
-              <div
-                className="relative h-6 w-6 rounded-full border-2 transition-all duration-300"
-                style={{
-                  borderColor: node.color,
-                  backgroundColor: isSelected ? node.color : "transparent",
-                  boxShadow: `0 0 20px ${node.color}`,
+              <motion.button
+                type="button"
+                onClick={() => handleNodeClick(node.title)}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="group relative block cursor-pointer p-4"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: selectedCategory && !isSelected ? 0.3 : 1,
+                  scale: 1,
                 }}
+                transition={{ delay: node.delay, duration: 0.6 }}
               >
-                <div
-                  className="absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{ backgroundColor: node.color }}
-                />
-              </div>
+                {/* Floating wrapper - the float animation lives here so it
+                    doesn't clobber Framer Motion's own transform on the
+                    button above (both mechanisms fully own `transform`) */}
+                <div className="constellation-node relative">
+                  {/* Glow */}
+                  <div
+                    className="absolute -inset-4 rounded-full opacity-30 blur-xl transition-opacity duration-300 group-hover:opacity-60"
+                    style={{ backgroundColor: node.color }}
+                  />
 
-              {/* Label */}
-              <div
-                className="absolute top-8 whitespace-nowrap text-xs font-medium uppercase tracking-wider opacity-70 transition-opacity group-hover:opacity-100"
-                style={{ color: node.color, left: "50%", transform: "translateX(-50%)" }}
-              >
-                {node.title}
-              </div>
-            </motion.button>
+                  {/* Node */}
+                  <div
+                    className="relative h-6 w-6 rounded-full border-2 transition-all duration-300"
+                    style={{
+                      borderColor: node.color,
+                      backgroundColor: isSelected ? node.color : "transparent",
+                      boxShadow: `0 0 20px ${node.color}`,
+                    }}
+                  >
+                    <div
+                      className="absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      style={{ backgroundColor: node.color }}
+                    />
+                  </div>
+
+                  {/* Label */}
+                  <div
+                    className="absolute top-8 whitespace-nowrap text-xs font-medium uppercase tracking-wider opacity-70 transition-opacity group-hover:opacity-100"
+                    style={{ color: node.color, left: "50%", transform: "translateX(-50%)" }}
+                  >
+                    {node.title}
+                  </div>
+                </div>
+              </motion.button>
+            </div>
           );
         })}
 
@@ -318,13 +359,18 @@ export default function Home() {
             const display = getNodeDisplay(selectedCategory!, node.data);
 
             return (
+              // Wrapper spans the full world (inset-0) so percentage
+              // coordinates match node.x/node.y and card.x/card.y exactly -
+              // both are rendered as independently absolutely-positioned
+              // elements (no flexbox re-centering), so the dot always sits
+              // precisely on the mathematically computed node position and
+              // never drifts toward the root. pointer-events-none on the
+              // wrapper (re-enabled only on the two buttons) keeps the
+              // transparent full-screen area from blocking clicks below.
               <motion.div
                 key={node.id}
-                className="absolute z-20"
-                style={{
-                  left: `${node.x}%`,
-                  top: `${node.y}%`,
-                }}
+                className="absolute inset-0 z-20 pointer-events-none"
+                style={{ transformOrigin: `${node.x}% ${node.y}%` }}
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{
                   opacity: isOtherSelected ? 0.4 : 1,
@@ -336,77 +382,78 @@ export default function Home() {
                   duration: 0.4,
                 }}
               >
-                <div
-                  className="relative flex items-center gap-3"
+                {/* Constellation Node */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedChildNode(isChildSelected ? null : node.id)}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  className="group absolute pointer-events-auto cursor-pointer"
                   style={{
+                    left: `${node.x}%`,
+                    top: `${node.y}%`,
                     transform: "translate(-50%, -50%)",
-                    flexDirection: card.isRight ? "row" : "row-reverse",
                   }}
                 >
-                  {/* Constellation Node */}
-                  <button
-                    type="button"
-                    onClick={() => setSelectedChildNode(isChildSelected ? null : node.id)}
-                    className="group relative flex-shrink-0"
-                  >
-                    <div
-                      className="absolute -inset-3 rounded-full opacity-30 blur-lg transition-opacity group-hover:opacity-60"
-                      style={{ backgroundColor: selectedNode?.color }}
-                    />
-                    <div
-                      className="relative h-3 w-3 rounded-full border-2 transition-all duration-300 group-hover:scale-150"
-                      style={{
-                        borderColor: selectedNode?.color,
-                        backgroundColor: "transparent",
-                        boxShadow: `0 0 15px ${selectedNode?.color}`,
-                      }}
-                    >
-                      <div
-                        className="absolute inset-0 rounded-full opacity-0 transition-opacity group-hover:opacity-100"
-                        style={{ backgroundColor: selectedNode?.color }}
-                      />
-                    </div>
-                  </button>
-
-                  {/* Compact Card */}
-                  <button
-                    type="button"
-                    onClick={() => setSelectedChildNode(isChildSelected ? null : node.id)}
-                    className="group cursor-pointer rounded-xl border bg-[#02030a]/98 p-4 text-left backdrop-blur-xl transition-all duration-300 hover:shadow-2xl"
+                  <div
+                    className="absolute -inset-3 rounded-full opacity-30 blur-lg transition-opacity group-hover:opacity-60"
+                    style={{ backgroundColor: selectedNode?.color }}
+                  />
+                  <div
+                    className="relative h-3 w-3 rounded-full border-2 transition-all duration-300 group-hover:scale-150"
                     style={{
-                      width: `${card.width}vw`,
-                      minHeight: `${card.height}vh`,
-                      borderColor: `${selectedNode?.color}40`,
-                      boxShadow: `0 0 25px ${selectedNode?.color}25`,
+                      borderColor: selectedNode?.color,
+                      backgroundColor: "transparent",
+                      boxShadow: `0 0 15px ${selectedNode?.color}`,
                     }}
                   >
-                    {display.badge && (
-                      <div
-                        className="mb-2 inline-block rounded-full px-3 py-1 text-xs font-bold uppercase"
-                        style={{
-                          backgroundColor: `${selectedNode?.color}20`,
-                          color: selectedNode?.color,
-                        }}
-                      >
-                        {display.badge}
-                      </div>
-                    )}
-                    <h3 className="mb-1 text-sm font-bold text-white">
-                      {display.title}
-                    </h3>
-                    {display.subtitle && (
-                      <p className="mb-2 text-xs text-white/50">{display.subtitle}</p>
-                    )}
-                    {display.bodyLines.length > 0 && (
-                      <>
-                        <div className="h-px bg-white/10 mb-2" />
-                        <p className="text-xs text-white/70 line-clamp-2">
-                          {display.bodyLines[0]}
-                        </p>
-                      </>
-                    )}
-                  </button>
-                </div>
+                    <div
+                      className="absolute inset-0 rounded-full opacity-0 transition-opacity group-hover:opacity-100"
+                      style={{ backgroundColor: selectedNode?.color }}
+                    />
+                  </div>
+                </button>
+
+                {/* Compact Card */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedChildNode(isChildSelected ? null : node.id)}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  className="group absolute pointer-events-auto cursor-pointer rounded-xl border bg-[#02030a]/98 p-4 text-left backdrop-blur-xl transition-all duration-300 hover:shadow-2xl"
+                  style={{
+                    left: `${card.x}%`,
+                    top: `${card.y}%`,
+                    width: `${card.width}vw`,
+                    minHeight: `${card.height}vh`,
+                    borderColor: `${selectedNode?.color}40`,
+                    boxShadow: `0 0 25px ${selectedNode?.color}25`,
+                  }}
+                >
+                  {display.badge && (
+                    <div
+                      className="mb-2 inline-block rounded-full px-3 py-1 text-xs font-bold uppercase"
+                      style={{
+                        backgroundColor: `${selectedNode?.color}20`,
+                        color: selectedNode?.color,
+                      }}
+                    >
+                      {display.badge}
+                    </div>
+                  )}
+                  <h3 className="mb-1 text-sm font-bold text-white">
+                    {display.title}
+                  </h3>
+                  {display.subtitle && (
+                    <p className="mb-2 text-xs text-white/50">{display.subtitle}</p>
+                  )}
+                  {display.bodyLines.length > 0 && (
+                    <>
+                      <div className="h-px bg-white/10 mb-2" />
+                      <p className="text-xs text-white/70 line-clamp-2">
+                        {display.bodyLines[0]}
+                      </p>
+                    </>
+                  )}
+                </button>
               </motion.div>
             );
           })}

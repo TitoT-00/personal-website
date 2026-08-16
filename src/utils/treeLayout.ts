@@ -8,12 +8,16 @@ const CARD_MIN_HEIGHT = 12;
 const NODE_CARD_GAP = 2;
 const PROGRESSION_START_X = 14; // horizontal distance from root to first item
 const PROGRESSION_START_Y = 12; // vertical distance from root to first item
-const PROGRESSION_STEP_X = 7; // horizontal stagger between items (visual diagonal)
-const PROGRESSION_STEP_Y = 16; // vertical stagger between items (> card height, guarantees zero overlap)
+const PROGRESSION_STEP_X = 10; // horizontal stagger between items (visual diagonal)
+const PROGRESSION_STEP_Y = 22; // vertical stagger between items - well beyond card height (12) so there's a clear visual gap, not just a non-overlap technicality
+const PROGRESSION_MAX_OFFSET_X = 46; // cap how far the staircase can reach on each axis so a long history (many items) never crosses into a neighboring hub node's sector
+const PROGRESSION_MAX_OFFSET_Y = 70; // high enough that up to ~4 items are never compressed below their intended step spacing (which would close the gap between consecutive cards to less than the card height)
 const RADIAL_RADIUS = 22; // base distance from root to each fan node
+const RADIAL_RADIUS_PER_ITEM = 2.5; // push the whole fan further out as item count grows, so wide cards don't reach neighboring hub nodes
 const RADIAL_RING_OFFSET = 10; // alternating ring stagger so adjacent cards never overlap
 const RADIAL_MIN_ARC = 90; // minimum fan spread in degrees
 const RADIAL_ARC_PER_ITEM = 22; // additional spread per item beyond 3
+const RADIAL_MAX_ARC = 100; // hub nodes are 60deg apart - cap the arc well under that so the fan never sweeps into a neighboring node's sector
 
 /**
  * Generate smooth cubic Bezier curve
@@ -82,9 +86,19 @@ export function calculateProgressionTree(
 
   sortedItems.forEach((item, index) => {
     // Staircase outward: both axes grow every step by a fixed amount that
-    // exceeds card dimensions, so overlap is mathematically impossible
-    const nodeX = rootX + signX * (PROGRESSION_START_X + index * PROGRESSION_STEP_X);
-    const nodeY = rootY + signY * (PROGRESSION_START_Y + index * PROGRESSION_STEP_Y);
+    // exceeds card dimensions, so overlap is mathematically impossible.
+    // Each axis is capped so a long history (many items) can never reach
+    // far enough to cross into a neighboring hub node's sector.
+    const offsetX = Math.min(
+      PROGRESSION_START_X + index * PROGRESSION_STEP_X,
+      PROGRESSION_MAX_OFFSET_X
+    );
+    const offsetY = Math.min(
+      PROGRESSION_START_Y + index * PROGRESSION_STEP_Y,
+      PROGRESSION_MAX_OFFSET_Y
+    );
+    const nodeX = rootX + signX * offsetX;
+    const nodeY = rootY + signY * offsetY;
 
     nodes.push({
       id: item.id,
@@ -145,9 +159,18 @@ export function calculateRadialTree(
   const cards: CardLayout[] = [];
   const branches: BranchPath[] = [];
 
-  // Arc spread grows with item count so nodes never crowd together
-  const arcDegrees = RADIAL_MIN_ARC + Math.max(0, items.length - 3) * RADIAL_ARC_PER_ITEM;
+  // Arc spread grows with item count so nodes never crowd together, but is
+  // capped well under the 60deg gap between hub nodes so a large fan (e.g.
+  // 10 Skills) never sweeps into and covers a neighboring hub node/card.
+  const arcDegrees = Math.min(
+    RADIAL_MIN_ARC + Math.max(0, items.length - 3) * RADIAL_ARC_PER_ITEM,
+    RADIAL_MAX_ARC
+  );
   const startAngle = outwardAngle - arcDegrees / 2;
+
+  // Base radius also grows with item count so wide cards packed into the
+  // capped arc are pushed further from the hub, away from neighboring nodes.
+  const baseRadius = RADIAL_RADIUS + Math.max(0, items.length - 3) * RADIAL_RADIUS_PER_ITEM;
 
   items.forEach((item, index) => {
     const angle = startAngle + (index / Math.max(items.length - 1, 1)) * arcDegrees;
@@ -156,7 +179,7 @@ export function calculateRadialTree(
     // Alternate between two concentric rings - guarantees adjacent fan
     // nodes (and their cards) are separated both angularly AND radially,
     // eliminating overlap even when the arc is tightly packed
-    const ringRadius = RADIAL_RADIUS + (index % 2 === 1 ? RADIAL_RING_OFFSET : 0);
+    const ringRadius = baseRadius + (index % 2 === 1 ? RADIAL_RING_OFFSET : 0);
 
     const nodeX = rootX + Math.cos(radians) * ringRadius;
     const nodeY = rootY + Math.sin(radians) * ringRadius;
