@@ -1,0 +1,32 @@
+/* Shared world coordinates keep every branch attached to its original hub. */
+.anchored-constellation { position: absolute; inset: 65px 0 50px; overflow: auto; scrollbar-width: thin; scrollbar-color: #50465d transparent; }
+.constellation-world-map { position: absolute; left: 50%; top: 50%; width: 1000px; height: 650px; transform-origin: center; transition: transform .75s cubic-bezier(.22,1,.36,1); }
+.constellation-world-map > .universe-canvas { opacity: .8; transition: opacity .5s; }
+.has-expansion .universe-canvas { opacity: .35; }
+.anchored-lines { position: absolute; inset: 0; width: 1000px; height: 650px; overflow: visible; pointer-events: none; }
+.anchored-lines path { fill: none; stroke-width: 1; }
+.hub-connection { opacity: .3; }
+.anchored-branch { opacity: .7; stroke-dasharray: 1; animation: connect-branch .65s ease both; }
+.anchored-hub { position: absolute; width: 54px; height: 54px; padding: 0; transform: translate(-50%, -50%); transition: opacity .35s; }
+.anchored-hub .node-orb { width: 54px; height: 54px; }
+.hub-title { position: absolute; left: 50%; top: 69px; transform: translateX(-50%); white-space: nowrap; font-size: 15px; }
+.muted-hub { opacity: .4; }
+.muted-hub:hover { opacity: 1; }
+.anchored-hub[aria-expanded=true] .node-orb { box-shadow: 0 0 35px color-mix(in srgb,var(--node-color) 35%,transparent); }
+.anchored-leaf { position: absolute; width: 180px; padding: 0; transform: translate(-50%, -6px); display: flex; flex-direction: column; align-items: center; gap: 9px; animation: star-arrive .5s ease both; }
+.anchored-leaf .leaf-copy { text-align: center; max-width: 180px; align-items: center; padding: 6px; background: #0a0a11d9; }
+.anchored-leaf .leaf-copy strong { font-size: 15px; }
+.anchored-leaf .leaf-copy small { font-size: 10px; }
+.anchored-leaf .leaf-copy > span { font-size: 11px; }
+.anchored-leaf:hover .leaf-star { background: var(--node-color); box-shadow: 0 0 24px var(--node-color); }
+.branch-actions { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; pointer-events: none; z-index: 5; }
+.branch-actions button { pointer-events: auto; background: #08090de8; padding: 10px; border-radius: 5px; font-size: 10px; color: #bab0ca; }
+.scene-expanded { height: 700px; }
+@media(max-width:800px) { .scene-expanded { height: 650px; } .anchored-constellation { overflow: auto; } .has-expansion .constellation-world-map { transition-duration: .5s; } }
+
+.anchored-constellation { cursor: grab; }
+.anchored-constellation:active { cursor: grabbing; }
+.constellation-world-map { transition: none; }
+.branch-actions { position: sticky; height: 0; top: 0; left: 0; }
+.scene-controls .read-zoom { width: auto; padding: 0 10px; font-size: 10px; color: #d2bfef; }
+.scene-controls button:disabled { opacity: .3; cursor: default; }
