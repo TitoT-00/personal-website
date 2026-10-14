@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Tito Thomas — Software Engineer",
   description: "Tito Thomas, software engineer. Professional experience, technical skills, education, and contact information.",
+  icons: {
+    icon: "./supernova.ico",
+  },
 };
 
 export default function RootLayout({
