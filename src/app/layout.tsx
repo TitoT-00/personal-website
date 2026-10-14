@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./constellation.css";
 import "./dialogs.css";
+import "./immersive.css";
+import "./portfolio-dialog.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Tito Thomas — Software Engineer",
-  description: "Explore the skills, projects, and journey of Tito Thomas through an interactive portfolio constellation.",
+  description: "Tito Thomas, software engineer. Professional experience, technical skills, education, and contact information.",
 };
 
 export default function RootLayout({

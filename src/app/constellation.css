@@ -30,3 +30,45 @@
 .branch-actions { position: sticky; height: 0; top: 0; left: 0; }
 .scene-controls .read-zoom { width: auto; padding: 0 10px; font-size: 10px; color: #d2bfef; }
 .scene-controls button:disabled { opacity: .3; cursor: default; }
+
+/* The intro now opens the page directly after removing the global header. */
+.portfolio > .intro { padding-top: 64px; }
+@media(max-width: 600px) { .portfolio > .intro { padding-top: 42px; } }
+
+/* A wider stage gives the 3D map and its branches room to breathe. */
+.portfolio {
+  position: relative;
+  width: 100%;
+  max-width: 2200px;
+  padding-inline: clamp(18px, 2.5vw, 54px);
+  isolation: isolate;
+}
+.scene { height: clamp(620px, 68vh, 820px); }
+.scene-expanded { height: clamp(700px, 76vh, 920px); }
+
+.ambient-starfield {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  opacity: .72;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(91, 55, 155, .13), transparent 34%),
+    radial-gradient(circle at 12% 70%, rgba(39, 98, 130, .07), transparent 30%),
+    linear-gradient(180deg, #08090d 0%, #06070b 100%);
+}
+@media(max-width: 800px) {
+  .portfolio { padding-inline: 16px; }
+  .scene { height: 590px; }
+  .scene-expanded { height: 680px; }
+  .ambient-starfield { opacity: .55; }
+}

@@ -121,13 +121,6 @@ const skills = [
     level: 8,
     yearsOfExperience: 3,
   },
-  {
-    id: "skill-10",
-    category: "AI",
-    name: "OpenAI API",
-    level: 8,
-    yearsOfExperience: 2,
-  },
 ];
 
 export const portfolioData: PortfolioData = {
@@ -136,14 +129,14 @@ export const portfolioData: PortfolioData = {
       id: "career-1",
       year: "Sept 2025 - March 2026",
       title: "Software Engineer (Full Stack)",
-      company: "Campus Connect AI",
+      company: "Campus Connect",
       responsibilities: [
         "Owned development of a cross platform mobile application using React Native and TypeScript, taking major features from product requirements through implementation, testing, and release.",
         "Designed the application architecture, database schema, and end to end user workflows, mapping how data, backend services, and client functionality interacted across the platform.",
-        "Built Python REST APIs supporting authentication, application business logic, and AI powered features, including integrations with the OpenAI API.",
+        "Built Python REST APIs supporting authentication and application business logic.",
         "Took ownership of the product beyond assigned development tasks by identifying usability issues, proposing technical and design improvements, and shaping features throughout the development lifecycle.",
       ],
-      technologies: ["React Native", "Python", "TypeScript", "REST APIs","OpenAI API", "Docker","Google Cloud Run", "Google Artifact Registry", "Google Secret Manager"],
+      technologies: ["React Native", "Python", "TypeScript", "REST APIs", "Docker", "Google Cloud Run", "Google Artifact Registry", "Google Secret Manager"],
     },
     {
       id: "career-2",
@@ -152,9 +145,8 @@ export const portfolioData: PortfolioData = {
       company: "SOULCHI",
       responsibilities: [
         "Developed cross-platform mobile applications using Flutter and Firebase, contributing to core product functionality and production releases.",
-        "Integrated a ChatGPT-powered conversational assistant using the OpenAI API, designing backend services to securely process prompts, manage conversational context, and deliver real-time responses within the mobile application.",
         "Built backend APIs and Firebase Cloud Functions supporting production features, application logic, and automated workflows.",
-        "Designed and refined the home screen experience, improving layout, visual hierarchy, component styling, andoverall mobile UI aesthetics in collaboration with designers and stakeholders.",
+        "Designed and refined the home screen experience, improving layout, visual hierarchy, component styling, and overall mobile UI aesthetics in collaboration with designers and stakeholders.",
       ],
       technologies: ["Flutter", "Dart", "Firebase", "Node.js", "Riverpod", "Cloud Functions"],
     },
@@ -164,7 +156,7 @@ export const portfolioData: PortfolioData = {
       title: "Software Engineer (Mobile + Web)",
       company: "Maxsip Telecom",
       responsibilities: [
-        "Led development of cross platform mobile and web applications supporting enterprise telecommunicationsoperations.",
+        "Led development of cross platform mobile and web applications supporting enterprise telecommunications operations.",
         "Built React and Node.js applications for inventory, order management, user administration, and reporting.",
         "Developed Flutter mobile applications deployed to Google Play and the Apple App Store.",
         "Participated in architecture, testing, deployment, and ongoing production support.",
@@ -180,9 +172,6 @@ export const portfolioData: PortfolioData = {
       degree: "Master of Science",
       institution: "Troy University",
       fieldOfStudy: "Computer Science",
-      achievements: [
-        "Concentrating on Artificial Intelligence and Machine Learning",
-      ],
     },
     {
       id: "edu-2",
@@ -190,9 +179,6 @@ export const portfolioData: PortfolioData = {
       degree: "Bachelors",
       institution: "Hofstra University",
       fieldOfStudy: "Computer Science",
-      achievements: [
-        
-      ],
     },
   ],
   Hobbies: [
@@ -212,24 +198,7 @@ export const portfolioData: PortfolioData = {
       description: "Strategy games and competitive esports",
     },
   ],
-  "Side Projects": [
-    {
-      id: "project-1",
-      name: "Task Manager Pro",
-      description: "A modern task management app with real-time collaboration",
-      technologies: ["React", "Firebase", "Tailwind CSS"],
-      link: "https://github.com/example/task-manager",
-      year: "2023",
-    },
-    {
-      id: "project-2",
-      name: "Weather Dashboard",
-      description: "Beautiful weather visualization with forecasts and alerts",
-      technologies: ["Next.js", "TypeScript", "Chart.js"],
-      link: "https://github.com/example/weather-dashboard",
-      year: "2022",
-    },
-  ],
+  "Side Projects": [],
   Contact: [
     {
       id: "contact-1",

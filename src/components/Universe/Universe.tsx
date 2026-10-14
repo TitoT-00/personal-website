@@ -74,6 +74,33 @@ export default function Universe({ paused, zoom, reset, color }: { paused: boole
         }
         ctx.strokeStyle = ring === 0 ? "#aaa0e32c" : "#aaa0e313"; ctx.lineWidth = .7; ctx.stroke();
       }
+
+      // A few depth-sorted particles make the field read as a volume instead
+      // of a flat wireframe, while staying subtle behind the portfolio nodes.
+      const particles = Array.from({ length: 34 }, (_, index) => {
+        const angle = index * 2.399 + time * (index % 2 ? .7 : -.45);
+        const radius = 1.05 + (index % 7) * .085;
+        const [x, y, depth] = project(
+          Math.cos(angle) * radius,
+          Math.sin(angle * .83) * radius,
+          Math.sin(angle) * .72,
+        );
+        return { x, y, depth, index };
+      }).sort((a, b) => b.depth - a.depth);
+
+      for (const particle of particles) {
+        const near = Math.max(0, Math.min(1, (1.5 - particle.depth) / 3));
+        const radius = .7 + near * 1.5;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = particle.index % 5 === 0
+          ? `rgba(121,215,234,${.18 + near * .42})`
+          : `rgba(193,174,255,${.12 + near * .35})`;
+        ctx.shadowColor = settings.current.color;
+        ctx.shadowBlur = 4 + near * 7;
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
     };
     frame = requestAnimationFrame(draw);
     return () => { cancelAnimationFrame(frame); resize.disconnect(); el.removeEventListener("pointerdown", down); el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up); };
