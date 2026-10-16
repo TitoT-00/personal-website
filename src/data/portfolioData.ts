@@ -126,7 +126,21 @@ const skills = [
 export const portfolioData: PortfolioData = {
   Career: [
     {
-      id: "career-1",
+      id: "carrer-1",
+      year: "Sept 2025 - Current",
+      title: "IT Engineer",
+      company: "Optum",
+      responsibilities: [
+        " Provided Tier 2 technical support for clinical and corporate users in a healthcare environment, resolving hardware, software, and connectivity issues to minimize downtime and support patient care operations",
+        "Managed incidents, problems, and service requests using ServiceNow, ensuring accurate documentation, prioritization, and SLA compliance.",
+        "Supported Go-Live deployments across multiple clinical sites, delivering on-site technical support for system rollouts, workstation activations, and application launches.",
+        "Installed, configured, and maintained medical, vendor, and endpoint devices, including building full workstation setups for physicians, exam rooms, and medical bays.",
+        "Executed scripts and performed device imaging, OS configuration, and software installations to support system updates, troubleshooting, and site expansions.",
+      ],
+      technologies: ["Windows 10/11","Active Directory","Microsoft Intune","Cisco AnyConnect VPN","ServiceNow","RDP","TCP/IP"]
+    },
+    {
+      id: "career-2",
       year: "Sept 2025 - March 2026",
       title: "Software Engineer (Full Stack)",
       company: "Campus Connect",
@@ -139,7 +153,7 @@ export const portfolioData: PortfolioData = {
       technologies: ["React Native", "Python", "TypeScript", "REST APIs", "Docker", "Google Cloud Run", "Google Artifact Registry", "Google Secret Manager"],
     },
     {
-      id: "career-2",
+      id: "career-3",
       year: "Feb 2025 - Nov 2025",
       title: "Full Stack Developer",
       company: "SOULCHI",
@@ -151,7 +165,7 @@ export const portfolioData: PortfolioData = {
       technologies: ["Flutter", "Dart", "Firebase", "Node.js", "Riverpod", "Cloud Functions"],
     },
     {
-      id: "career-3",
+      id: "career-4",
       year: "Dec 2022 - Dec 2024",
       title: "Software Engineer (Mobile + Web)",
       company: "Maxsip Telecom",
